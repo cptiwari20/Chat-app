@@ -9,12 +9,23 @@ var server     = http.createServer(app);
 var io         = socketIO(server);
 app.use(express.static(publicPath));
 
-io.on('connection', (socket) => {
+io.on('connection', function(socket){
     console.log('New User Connected');
 
-    socket.on('disconnect', () =>{
+    socket.emit('newMessage', {
+        from: "vikas@example.com",
+        text: "Hey! whats up",
+        createdAt: new Date()
+    });
+
+    socket.on('createMessage', (newMessage) =>{
+        console.log("Get a new Message From the client:", newMessage)
+    })
+
+    socket.on('disconnect', function(){
         console.log('User get disconnected!')
     });
+
 })
 
 server.listen(Port, (req, res)=> {
