@@ -19,13 +19,10 @@ io.on('connection', function(socket){
     socket.broadcast.emit("newMessage", generateMessage('Admin', "A new user connected to the chat room!"))
 
 
-    socket.on('createMessage', (message) =>{
+    socket.on('createMessage', (message, callback) =>{
         console.log("Get a new Message From the client:", message)
-        io.emit('newMessage', {
-            from: message.from,
-            text: message.text,
-            createdAt: new Date().getTime()
-        })
+        io.emit('newMessage', generateMessage(message.from, message.text));
+        callback("This message ha reached to the server successfully")
         // socket.broadcast.emit('newMessage', {
         //        from: message.from,
         //        text: message.text,
